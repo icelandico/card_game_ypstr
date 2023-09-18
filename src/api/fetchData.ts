@@ -1,4 +1,8 @@
-import { IApiResponse } from ".";
+export interface IApiResponse<T> {
+  data: T,
+  error?: Error,
+  success?: boolean;
+}
 
 export const fetchData = async <T>(url: string, options = {}): Promise<IApiResponse<T>> => {
   try {

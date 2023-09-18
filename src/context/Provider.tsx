@@ -1,16 +1,9 @@
-import {createContext, ReactNode, useContext, useMemo, useState} from "react";
+import {createContext, ReactNode, useContext, useState} from "react";
+import { IDrawCardResponse } from "../api";
 export const DEFAULT_CARDS_NUMBER = 52;
 
 interface IProvider {
   children: ReactNode;
-}
-
-interface IDrawCardResponse {
-  code: string;
-  image: string;
-  images: string[];
-  value: string;
-  suit: string;
 }
 
 export interface ICardContext {
@@ -22,7 +15,9 @@ export interface ICardContext {
   setIsLoading: (state: boolean) => void;
   setScore: (score: number) => {};
   drawCardResponse?: IDrawCardResponse;
+  nextCardResponse?: IDrawCardResponse;
   setDrawCardResponse: (cardRes: IDrawCardResponse) => void;
+  setNextCardResponse: (cardRes: IDrawCardResponse) => void;
   score: number;
 }
 
@@ -34,8 +29,10 @@ const initialState: ICardContext = {
   setCardsRemaining: () => {},
   setIsLoading: () => {},
   setDrawCardResponse: () => {},
+  setNextCardResponse: () => {},
   setScore: () => {},
   drawCardResponse: undefined,
+  nextCardResponse: undefined,
   score: 0,
 }
 
@@ -48,6 +45,7 @@ export const Provider = ({ children }: IProvider) => {
   const [deckId, setDeckId] = useState('');
   const [score, setScore] = useState(initialState.score);
   const [drawCardResponse, setDrawCardResponse] = useState(initialState.drawCardResponse);
+  const [nextCardResponse, setNextCardResponse] = useState(initialState.drawCardResponse);
 
   return (
     <CardContext.Provider value={{
@@ -61,6 +59,8 @@ export const Provider = ({ children }: IProvider) => {
       setDrawCardResponse,
       score,
       setScore,
+      nextCardResponse,
+      setNextCardResponse,
     }}>
       {children}
     </CardContext.Provider>

@@ -9,10 +9,12 @@ export interface IFetchInitDeck {
   shuffled: boolean;
 }
 
-export interface IApiResponse<T> {
-  data: T,
-  error?: Error,
-  success?: boolean;
+export interface IDrawCardResponse {
+  code: string;
+  image: string;
+  images: string[];
+  value: string;
+  suit: string;
 }
 
 export const fetchInitShuffleDeck = async () => {
