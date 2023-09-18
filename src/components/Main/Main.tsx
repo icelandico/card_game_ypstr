@@ -1,4 +1,4 @@
-import React, {Profiler, useContext, useEffect, useState} from 'react';
+import React, { useEffect } from 'react';
 import {
   Image,
   Pressable,
@@ -18,7 +18,7 @@ enum GUESS_VALUES {
 function App() {
   const {
     cardsRemaining,
-    setRemainingCard,
+    setCardsRemaining,
     setDeckId,
     deckId,
     updateDeckValue,
@@ -31,8 +31,6 @@ function App() {
     setScore,
     setNextCardResponse,
   } = useCardContext();
-  const [userGuess, setUserGuess] = useState<null | GUESS_VALUES>(null);
-
   useEffect(() => {
     fetchInitShuffleDeck().then(res => {
       if (res.data) {
@@ -52,7 +50,7 @@ function App() {
   const handleUserGuess = (guess: GUESS_VALUES) => {
     let comparisonResult;
     fetchDrawACard(deckId).then(res => {
-      setDrawCardResponse(res.data.cards[0]);
+      setCardsRemaining(res?.data?.remaining);
       const currentCard = {
         suit: drawCardResponse.suit,
         value: drawCardResponse.value,
@@ -64,14 +62,13 @@ function App() {
       }
       const getCardsComparison = compareCards(currentCard, nextCard);
 
-      if (getCardsComparison < 0) {
+      if (getCardsComparison > 0) {
         comparisonResult = GUESS_VALUES.LOWER
-      } else if (getCardsComparison > 0) {
+      } else if (getCardsComparison < 0) {
         comparisonResult = GUESS_VALUES.HIGHER
       }
-      console.log('COMPARISON RES', guess, comparisonResult)
       comparisonResult === guess ? setScore(prev => prev + 1) : null;
-
+      setDrawCardResponse(res.data.cards[0]);
     })
   }
 
